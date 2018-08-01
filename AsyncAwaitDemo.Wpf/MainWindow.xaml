@@ -32,11 +32,11 @@
             <Button DockPanel.Dock="Left" Command="{Binding LoadAsyncItemsParallelCommand}">Load Async Parallel</Button>
             <Button DockPanel.Dock="Left" Command="{Binding VoidSafeExceptionCommand}">Void Safe Exception</Button>
             <Button DockPanel.Dock="Left" Command="{Binding VoidExceptionCommand}">Void Exception</Button>
-            
+
             <ProgressBar DockPanel.Dock="Right"
                          Minimum="0"
                          Value="{Binding Items.Count, Mode=OneWay}"
-                         Maximum="100"></ProgressBar>
+                         Maximum="{Binding ItemCount, Mode=OneWay}"></ProgressBar>
         </DockPanel>
     </Grid>
 </Window>
