@@ -17,14 +17,9 @@ using System.Windows.Threading;
 
 namespace AsyncAwaitDemo.Wpf.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public partial class MainViewModel : INotifyPropertyChanged
     {
         private readonly StringService stringService = new StringService();
-
-        private bool isExecuting = false;
-        private int itemCount = 0;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
@@ -32,16 +27,23 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
             LoadSyncItemsCommand = new MainViewModelCommand(LoadSyncItemsImpl, this);
             LoadAsyncItemsCommand = new MainViewModelCommand(LoadAsyncItemImpl, this);
             LoadAsyncItemsParallelCommand = new MainViewModelCommand(LoadAsyncItemsParallelImpl, this);
-            VoidSafeExceptionCommand = new MainViewModelCommand(VoidExceptionImpl, this, VoidExceptionCallback);
+            VoidSafeExceptionCommand = new MainViewModelCommand(VoidExceptionImpl, this, ex =>
+            {
+                Items.Clear();
+                ItemCount = 0;
+                Items.Add(ex.Message);
+            });
             VoidExceptionCommand = new RelayCommand(async () => await VoidExceptionImpl());
         }
 
+        #region UI setup
+        private bool isExecuting = false;
         public bool IsExecuting
         {
             get { return isExecuting; }
             set
             {
-                if(isExecuting != value)
+                if (isExecuting != value)
                 {
                     isExecuting = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExecuting)));
@@ -49,18 +51,21 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
             }
         }
 
+        private int itemCount = 0;
         public int ItemCount
         {
             get { return itemCount; }
             set
             {
-                if(itemCount != value)
+                if (itemCount != value)
                 {
                     itemCount = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemCount)));
                 }
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<string> Items { get; }
 
@@ -73,59 +78,7 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
         public ICommand VoidSafeExceptionCommand { get; }
 
         public ICommand VoidExceptionCommand { get; }
+        #endregion
 
-        private Task LoadSyncItemsImpl()
-        {
-            Items.Clear();
-            var ids = stringService.GetIndicies();
-            ItemCount = ids.Count;
-            foreach (var x in ids)
-            {
-                var str = stringService.GetString(x);
-                Items.Insert(0, str);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private async Task LoadAsyncItemImpl()
-        {
-            Items.Clear();
-            var ids = await stringService.GetIndiciesAsync();
-            ItemCount = ids.Count;
-            foreach (var x in ids)
-            {
-                var str = await stringService.GetStringAsync(x);
-                Items.Insert(0, str);
-            }
-        }
-
-        private async Task LoadAsyncItemsParallelImpl()
-        {
-            Items.Clear();
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            var ids = await stringService.GetIndiciesAsync();
-            ItemCount = ids.Count;
-            var tasks = ids.Select(x => Task.Run(async () =>
-            {
-                var str = await stringService.GetStringAsync(x);
-                await dispatcher.InvokeAsync(() => Items.Insert(0, str));
-            }));
-
-            await Task.WhenAll(tasks);
-        }
-
-        private async Task VoidExceptionImpl()
-        {
-            await Task.Delay(500).ConfigureAwait(false);
-            throw new ApplicationException("Async/Await void exception!");
-        }
-
-        private void VoidExceptionCallback(Exception ex)
-        {
-            Items.Clear();
-            ItemCount = 0;
-            Items.Add(ex.Message);
-        }
     }
 }
