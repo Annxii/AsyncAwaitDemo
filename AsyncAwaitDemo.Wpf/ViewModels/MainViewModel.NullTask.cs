@@ -10,13 +10,6 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
 {
     public partial class MainViewModel
     {
-        public ICommand NullTaskCommand { get; private set; }
-
-        private void InitNullTask()
-        {
-            NullTaskCommand = new MainViewModelCommand(NullTaskImpl, this, ex => throw ex);
-        }
-
         private Task NullTaskImpl()
         {
             Items.Clear();
@@ -25,5 +18,13 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
 
             return null;
         }
+
+        public ICommand NullTaskCommand { get; private set; }
+
+        private void InitNullTask()
+        {
+            NullTaskCommand = new MainViewModelCommand(NullTaskImpl, this, ex => throw ex);
+        }
+
     }
 }

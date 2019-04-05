@@ -10,6 +10,13 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
 {
     public partial class MainViewModel
     {
+        private async void InvalidContextImpl()
+        {
+            Items.Clear();
+            var str = await stringService.GetStringAsync(0).ConfigureAwait(false);
+            Items.Add(str);
+        }
+
         public ICommand InvalidContextCommand { get; private set; }
 
         private void InitInvalidContext()
@@ -17,11 +24,5 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
             InvalidContextCommand = new RelayCommand(InvalidContextImpl);
         }
 
-        private async void InvalidContextImpl()
-        {
-            Items.Clear();
-            var str = await stringService.GetStringAsync(0).ConfigureAwait(false);
-            Items.Add(str);
-        }
     }
 }
