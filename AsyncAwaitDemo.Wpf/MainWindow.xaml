@@ -32,6 +32,8 @@
             <Button DockPanel.Dock="Left" Command="{Binding LoadAsyncItemsParallelCommand}">Load Async Parallel</Button>
             <Button DockPanel.Dock="Left" Command="{Binding VoidSafeExceptionCommand}">Void Safe Exception</Button>
             <Button DockPanel.Dock="Left" Command="{Binding VoidExceptionCommand}">Void Exception</Button>
+            <Button DockPanel.Dock="Left" Command="{Binding NullTaskCommand}">Null-Task</Button>
+            <Button DockPanel.Dock="Left" Command="{Binding InvalidContextCommand}">Invalid Context</Button>
 
             <ProgressBar DockPanel.Dock="Right"
                          Minimum="0"

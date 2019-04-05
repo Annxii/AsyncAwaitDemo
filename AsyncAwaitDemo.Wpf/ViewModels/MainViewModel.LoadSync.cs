@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AsyncAwaitDemo.Wpf.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AsyncAwaitDemo.Wpf.ViewModels
 {
@@ -16,10 +18,18 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
             foreach (var x in ids)
             {
                 var str = stringService.GetString(x);
-                Items.Insert(0, str);
+                Items.Add(str);
             }
 
             return Task.CompletedTask;
         }
+
+        public ICommand LoadSyncItemsCommand { get; private set; }
+
+        private void InitLoadSync()
+        {
+            LoadSyncItemsCommand = new MainViewModelCommand(LoadSyncItemsImpl, this);
+        }
+
     }
 }

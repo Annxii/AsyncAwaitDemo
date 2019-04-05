@@ -1,8 +1,12 @@
-﻿using System;
+﻿using AsyncAwaitDemo.Wpf.Util;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AsyncAwaitDemo.Wpf.ViewModels
 {
@@ -16,9 +20,16 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
             foreach (var x in ids)
             {
                 var str = await stringService.GetStringAsync(x);
-                Items.Insert(0, str);
+                Debug.WriteLine($"Idx: {x} - Thread: {Thread.CurrentThread.ManagedThreadId}");
+                Items.Add(str);
             }
         }
 
+        public ICommand LoadAsyncItemsCommand { get; private set; }
+
+        private void InitLoadAsync()
+        {
+            LoadAsyncItemsCommand = new MainViewModelCommand(LoadAsyncItemImpl, this);
+        }
     }
 }

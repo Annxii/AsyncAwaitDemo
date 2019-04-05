@@ -20,17 +20,6 @@ namespace AsyncAwaitDemo.Wpf.Util
 
         public bool CanExecute(object parameter) => true;
 
-        public void Execute(object parameter)
-        {
-            try
-            {
-                action.Invoke();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
+        public void Execute(object parameter) => action.Invoke();
     }
 }

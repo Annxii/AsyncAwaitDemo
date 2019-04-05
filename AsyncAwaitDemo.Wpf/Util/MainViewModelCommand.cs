@@ -1,5 +1,6 @@
 ﻿using AsyncAwaitDemo.Wpf.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -9,15 +10,15 @@ namespace AsyncAwaitDemo.Wpf.Util
     {
         public event EventHandler CanExecuteChanged;
 
-        private readonly Func<Task> @delegate;
+        private readonly Func<Task> asyncAction;
         private readonly Action<Exception> exceptionCallback;
         private readonly MainViewModel mainViewModel;
 
-        public MainViewModelCommand(Func<Task> @delegate, MainViewModel mainViewModel, Action<Exception> exceptionCallback = null)
+        public MainViewModelCommand(Func<Task> asyncAction, MainViewModel mainViewModel, Action<Exception> exceptionCallback = null)
         {
-            this.@delegate = @delegate;
+            this.asyncAction = asyncAction;
             this.mainViewModel = mainViewModel;
-            this.exceptionCallback = exceptionCallback;
+            this.exceptionCallback = exceptionCallback ?? (ex => Debug.WriteLine(ex));
         }
 
         public bool CanExecute(object parameter) => true;
@@ -27,11 +28,11 @@ namespace AsyncAwaitDemo.Wpf.Util
             mainViewModel.IsExecuting = true;
             try
             {
-                await @delegate.Invoke();
+                await asyncAction.Invoke();
             }
             catch (Exception ex)
             {
-                exceptionCallback?.Invoke(ex);
+                exceptionCallback.Invoke(ex);
             }
             finally
             {
