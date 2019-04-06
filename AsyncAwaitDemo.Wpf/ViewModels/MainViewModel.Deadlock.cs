@@ -13,8 +13,10 @@ namespace AsyncAwaitDemo.Wpf.ViewModels
         private void DeadlockImpl()
         {
             Items.Clear();
-            var str = stringService.GetStringAsync(0).Result;
+            var str = CallWrapper().Result;
             Items.Add(str);
+
+            async Task<string> CallWrapper() => await stringService.GetStringAsync(0);
         }
 
         public ICommand DeadlockCommand { get; private set; }

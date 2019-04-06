@@ -43,7 +43,7 @@ namespace AsyncAwaitDemo.Wpf.Util
         {
             using (var client = new HttpClient())
             {
-                var result = await client.GetStringAsync(GET_COUNT_URL);
+                var result = await client.GetStringAsync(GET_COUNT_URL).ConfigureAwait(false);
                 var count = int.Parse(result);
                 return Enumerable.Range(0, count).ToList();
             }
@@ -53,7 +53,7 @@ namespace AsyncAwaitDemo.Wpf.Util
         {
             using (var client = new HttpClient())
             {
-                var result = await client.GetStringAsync(SVC_URL + idx);
+                var result = await client.GetStringAsync(SVC_URL + idx).ConfigureAwait(false);
                 return FormatItem(idx, result);
             }
         }
