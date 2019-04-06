@@ -62,6 +62,7 @@
     <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\StringService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.Deadlock.cs" />
     <Compile Include="ViewModels\MainViewModel.InvalidContext.cs" />
     <Compile Include="ViewModels\MainViewModel.LoadAsync.cs" />
     <Compile Include="ViewModels\MainViewModel.LoadAsyncParallel.cs" />

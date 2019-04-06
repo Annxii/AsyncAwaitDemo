@@ -34,6 +34,7 @@
             <Button DockPanel.Dock="Left" Command="{Binding VoidExceptionCommand}">Void Exception</Button>
             <Button DockPanel.Dock="Left" Command="{Binding NullTaskCommand}">Null-Task</Button>
             <Button DockPanel.Dock="Left" Command="{Binding InvalidContextCommand}">Invalid Context</Button>
+            <Button DockPanel.Dock="Left" Command="{Binding DeadlockCommand}">Deadlock</Button>
 
             <ProgressBar DockPanel.Dock="Right"
                          Minimum="0"
