@@ -11,7 +11,7 @@ namespace AsyncAwaitDemo.Wpf.Util
 {
     public class StringService
     {
-        private const string SVC_URL = "https://localhost:5001/api/values/";
+        private const string SVC_URL = "http://localhost:53790/api/values/";
         private const string GET_COUNT_URL = SVC_URL + "count";
 
         public IReadOnlyList<int> GetIndicies()
